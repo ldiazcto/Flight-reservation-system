@@ -1,0 +1,3 @@
+reservations:
+  firebase:
+    path: "./firebase-account-info.json"
