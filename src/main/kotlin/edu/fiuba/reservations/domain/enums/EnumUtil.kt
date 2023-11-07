@@ -14,4 +14,10 @@ interface EnumUtil {
     }
 }
 
-inline fun <reified T> EnumCompanion<T>.fromCode(value: String)
+inline fun <reified T> EnumCompanion<T>.fromCode(value: String): T? where T : Enum<T>, T: EnumUtil {
+    return enumValues<T>().firstOrNull { it.type == value.uppercase() }
+}
+
+inline fun <reified T> EnumCompanion<T>.fromValue(value: String): T? where T : Enum<T>, T: EnumUtil {
+    return enumValues<T>().firstOrNull { it.name == value.uppercase() }
+}

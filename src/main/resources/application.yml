@@ -1,3 +1,13 @@
+spring:
+  profiles:
+    active: local
+
 reservations:
   firebase:
     path: "./firebase-account-info.json"
+
+server:
+  port: 8080
+  servlet:
+    context-path: "/api"
+    

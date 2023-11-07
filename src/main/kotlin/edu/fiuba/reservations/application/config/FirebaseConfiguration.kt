@@ -14,12 +14,10 @@ import java.io.FileInputStream
 @Configuration
 class FirebaseConfiguration {
 
-    @Value("\${reservations.firebase.path}")
-    private lateinit var firebaseAccountInfoPath: String
 
     @Bean
     fun firestore(): Firestore {
-        val serviceAccount = FileInputStream(firebaseAccountInfoPath)
+        val serviceAccount = FileInputStream("./src/main/resources/firebase-account-info.json")
         val options = FirebaseOptions.builder()
             .setCredentials(GoogleCredentials.fromStream(serviceAccount)).build()
         val firebaseApp = FirebaseApp.initializeApp(options)

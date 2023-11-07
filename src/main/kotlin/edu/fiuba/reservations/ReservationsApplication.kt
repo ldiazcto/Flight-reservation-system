@@ -1,11 +1,13 @@
-package edu.fiuba.flightreservationsapi
+package edu.fiuba.reservations
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class FlightReservationsApiApplication
+@ConfigurationPropertiesScan
+class ReservationsApplication
 
 fun main(args: Array<String>) {
-	runApplication<FlightReservationsApiApplication>(*args)
+	runApplication<ReservationsApplication>(*args)
 }
