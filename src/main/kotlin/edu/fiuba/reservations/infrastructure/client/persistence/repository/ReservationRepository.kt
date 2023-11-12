@@ -1,5 +1,5 @@
 package edu.fiuba.reservations.infrastructure.client.persistence.repository
 
-import edu.fiuba.reservations.domain.entity.Reservation
+import edu.fiuba.reservations.infrastructure.client.persistence.entity.ReservationEntity
 
-interface ReservationRepository : GenericRepository<Reservation>
+interface ReservationRepository : GenericRepository<ReservationEntity>
