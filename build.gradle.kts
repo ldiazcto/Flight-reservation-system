@@ -3,6 +3,8 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
 	id("org.springframework.boot") version "3.1.5"
 	id("io.spring.dependency-management") version "1.1.3"
+	// Linter
+	id("org.jlleitschuh.gradle.ktlint") version "11.6.1"
 	kotlin("jvm") version "1.8.22"
 	kotlin("plugin.spring") version "1.8.22"
 }
@@ -24,7 +26,6 @@ dependencies {
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("com.google.firebase:firebase-admin:9.2.0")
-	implementation("commons-beanutils:commons-beanutils:1.9.4")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
@@ -38,3 +39,4 @@ tasks.withType<KotlinCompile> {
 tasks.withType<Test> {
 	useJUnitPlatform()
 }
+

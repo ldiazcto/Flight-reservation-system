@@ -3,7 +3,6 @@ package edu.fiuba.reservations.infrastructure.client.persistence.repository
 import com.google.cloud.firestore.CollectionReference
 import org.apache.commons.beanutils.PropertyUtils
 
-
 abstract class GenericRepositoryImpl<T>(
     private val clazz: Class<T>
 ) : GenericRepository<T> {
