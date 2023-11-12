@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="LOGS" value="./logs" />
+
+    <springProfile name="local">
+        <appender name="STDOUT"
+                  class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>%magenta([request_id: %X{LogMDCFilter.UUID}]) - %d{dd-MM-yyyy HH:mm:ss.SSS} - %highlight(%-5level)- %logger{36}.%M - %msg%n</pattern>
+            </encoder>
+        </appender>
+
+        <!-- LOG everything at INFO level -->
+        <root level="${logging.level}">
+            <appender-ref ref="STDOUT" />
+        </root>
+    </springProfile>
+
+    <springProfile name="!local">
+        <appender name="STDOUT_2"
+                  class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>[request_id: %X{LogMDCFilter.UUID}] - %d{dd-MM-yyyy HH:mm:ss.SSS} - %-5level- %logger{36}.%M - %msg%n</pattern>
+            </encoder>
+        </appender>
+
+        <!-- LOG everything at INFO level -->
+        <root level="${logging.level}">
+            <appender-ref ref="STDOUT_2" />
+        </root>
+
+        <!-- This config is for logback framework -->
+        <logger name="com.zaxxer.hikari" level="debug" additivity="false">
+            <appender-ref ref="STDOUT_2"/>
+        </logger>
+    </springProfile>
+</configuration>
