@@ -13,8 +13,6 @@ import java.io.FileInputStream
 
 @Configuration
 class FirebaseConfiguration {
-
-
     @Bean
     fun firestore(): Firestore {
         val serviceAccount = FileInputStream("./src/main/resources/firebase-account-info.json")
