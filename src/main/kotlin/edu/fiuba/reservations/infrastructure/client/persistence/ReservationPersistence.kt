@@ -9,6 +9,7 @@ import edu.fiuba.reservations.infrastructure.client.persistence.repository.Gener
 import edu.fiuba.reservations.infrastructure.client.persistence.repository.ReservationRepository
 
 class ReservationPersistence(
+    private val collectionName: String,
     private val firestore: Firestore
 ) : ReservationRepository, GenericRepositoryImpl<ReservationEntity>(ReservationEntity::class.java) {
 
@@ -19,6 +20,6 @@ class ReservationPersistence(
     }
 
     override fun getCollection(): CollectionReference {
-        return firestore.collection("reservations")
+        return firestore.collection(collectionName)
     }
 }
