@@ -7,6 +7,7 @@ import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.slf4j.MDC
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpHeaders
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
@@ -15,7 +16,10 @@ import javax.annotation.Priority
 
 @Priority(1)
 @Component
-class LogFilter : OncePerRequestFilter() {
+class LogFilter(
+    @Value("\${reservations.endpoints.notFilter}")
+    private val endpointsNotToFilter: ArrayList<String>
+) : OncePerRequestFilter() {
     val log by logger()
 
     @Throws(java.io.IOException::class, ServletException::class)
@@ -37,7 +41,7 @@ class LogFilter : OncePerRequestFilter() {
     }
 
     override fun shouldNotFilter(request: HttpServletRequest): Boolean {
-        return request.requestURI.contains("/health") || request.requestURI.contains("/metrics")
+        return endpointsNotToFilter.any { request.requestURI.contains(it) }
     }
 
     override fun shouldNotFilterErrorDispatch(): Boolean {
