@@ -6,9 +6,12 @@ logging:
   level:
     ROOT: info
 
-reservations:
+data:
   firebase:
-    path: "./firebase-account-info.json"
+    path: "./src/main/resources/firebase-account-info.json"
+    collections:
+      reservation:
+        name: "reservations"
 
 server:
   port: 8080
