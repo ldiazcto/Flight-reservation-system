@@ -13,8 +13,27 @@ data:
       reservation:
         name: "reservations"
 
+reservations:
+  endpoints:
+    notFilter: health, metrics
+
 server:
   port: 8080
   servlet:
     context-path: "/api"
-    
+
+management:
+  server:
+    port: 8080
+  endpoints:
+    web:
+      base-path: "/"
+      exposure:
+        include: "*"
+      path-mapping:
+        metrics: "metric-names"
+        prometheus: "metrics"
+  prometheus:
+    metrics:
+      export:
+        enabled: true
