@@ -54,3 +54,7 @@ ktlint {
         exclude("**/style-violations.kt")
     }
 }
+
+configurations.all {
+    exclude(group = "commons-logging", module = "commons-logging")
+}
