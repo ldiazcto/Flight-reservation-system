@@ -13,6 +13,10 @@ data:
       reservation:
         name: "reservations"
 
+reservations:
+  endpoints:
+    notFilter: health, metrics
+
 server:
   port: 8080
   servlet:
