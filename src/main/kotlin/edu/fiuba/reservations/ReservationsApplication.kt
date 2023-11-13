@@ -11,9 +11,9 @@ import org.springframework.boot.runApplication
 class ReservationsApplication
 
 fun main(args: Array<String>) {
-	runApplication<ReservationsApplication>(*args)
+    runApplication<ReservationsApplication>(*args)
 }
 
 fun <R : Any> R.logger(): Lazy<Logger> {
-	return lazy { LoggerFactory.getLogger(this.javaClass) }
+    return lazy { LoggerFactory.getLogger(this.javaClass) }
 }
