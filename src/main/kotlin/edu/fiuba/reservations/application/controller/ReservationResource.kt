@@ -16,9 +16,9 @@ class ReservationResource(
 ) {
     @GetMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    fun getReservations(
+    fun getReservation(
         @PathVariable id: String
     ): ReservationDTO {
-        return reservationController.getReservation(id).toDTO()
+        return reservationController.getReservation(id)
     }
 }
