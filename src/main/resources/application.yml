@@ -12,6 +12,9 @@ data:
     collections:
       reservation:
         name: "reservations"
+  csv:
+    flights:
+      path: "./vuelos.csv"
 
 reservations:
   endpoints:
