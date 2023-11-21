@@ -13,7 +13,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 class ReservationExceptionHandler : ResponseEntityExceptionHandler() {
     private val log by logger()
-    
+
     @ExceptionHandler(value = [(ReservationException::class)])
     fun handleCustomerException(
         ex: ReservationException,

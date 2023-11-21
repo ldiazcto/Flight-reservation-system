@@ -22,7 +22,7 @@ class FlightFileManager(
 
     fun getFlights(flightCriteria: FlightCriteria): List<FlightSearch> {
         val flights = readFile().filter {
-            isSameAirline(flightCriteria.airline!!, it.airline)
+            isSameAirline(flightCriteria.airline!!, it.airline) &&
                 it.departureTime.isBetweenDates(flightCriteria.from!!, flightCriteria.to!!) &&
                 it.arrivalTime.isBetweenDates(flightCriteria.from, flightCriteria.to)
         }
