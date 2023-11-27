@@ -11,6 +11,7 @@ private const val requiredFieldMessageTemplate = "The {0} field is required"
 private const val invalidTypeValueMessageTemplate = "The {0} type provided does not match with any existing type"
 private const val invalidDateFormatMessageTemplate = "The {0} does not have the date format $DATE_PATTERN"
 private const val invalidDatesRangeMessageTemplate = "The {0} date is major than to date"
+private const val invalidDestinationMessageTemplate = "The {0} can not be the same as the origin"
 
 fun generateRequiredFieldException(fieldNames: List<String>): Exception {
     return ExceptionCode(
@@ -37,5 +38,12 @@ fun generateDatesRangeException(fieldNames: List<String>): Exception {
     return ExceptionCode(
         MessageFormat.format(invalidValueCodeTemplate, fieldNames.joinToString(".")),
         MessageFormat.format(invalidDatesRangeMessageTemplate, fieldNames.last())
+    )
+}
+
+fun generateDestinationException(fieldNames: List<String>): Exception {
+    return ExceptionCode(
+        MessageFormat.format(invalidValueCodeTemplate, fieldNames.joinToString(".")),
+        MessageFormat.format(invalidDestinationMessageTemplate, fieldNames.last())
     )
 }

@@ -14,6 +14,13 @@ class FlightCriteriaValidator : BaseValidator(), Validator<FlightCriteriaDTO> {
         val toDate = data.to?.toDateFromPatternWithoutHours(DATE_PATTERN)
 
         exceptions.addAll(
+            destinationValidator.validate(
+                data = Pair(data.origin!!, data.destination!!),
+                fieldNames = fieldNames.plus(FlightCriteriaDTO::destination.name)
+            )
+        )
+
+        exceptions.addAll(
             dateValidator.validate(
                 data = Pair(fromDate, toDate),
                 fieldNames = fieldNames.plus(FlightCriteriaDTO::from.name)

@@ -16,8 +16,6 @@ class DateValidator : Validator<Pair<ZonedDateTime?, ZonedDateTime?>> {
                 if (from > to) {
                     exceptions.add(generateDatesRangeException(fieldNames))
                 }
-            } ?: run {
-                exceptions.add(generateDatesRangeException(fieldNames))
             }
         }
 
