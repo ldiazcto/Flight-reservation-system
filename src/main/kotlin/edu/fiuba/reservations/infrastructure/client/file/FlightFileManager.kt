@@ -3,10 +3,13 @@ package edu.fiuba.reservations.infrastructure.client.file
 import edu.fiuba.reservations.domain.entity.FlightCriteria
 import edu.fiuba.reservations.domain.entity.FlightSearch
 import edu.fiuba.reservations.domain.enums.AirlineCode
+import edu.fiuba.reservations.domain.enums.AirportCode
+import edu.fiuba.reservations.domain.enums.fromPartialValue
 import edu.fiuba.reservations.domain.enums.fromValue
 import edu.fiuba.reservations.logger
 import edu.fiuba.reservations.utils.ifNotNull
 import edu.fiuba.reservations.utils.isBetweenDates
+import edu.fiuba.reservations.utils.toCustomBigDecimal
 import org.apache.commons.csv.CSVFormat
 import java.io.File
 import java.io.FileInputStream
@@ -22,8 +25,10 @@ class FlightFileManager(
 
     fun getFlights(flightCriteria: FlightCriteria): List<FlightSearch> {
         val flights = readFile().filter {
-            isSameAirline(flightCriteria.airline!!, it.airline) &&
-                it.departureTime.isBetweenDates(flightCriteria.from!!, flightCriteria.to!!) &&
+            isSameAirline(flightCriteria.airline, it.airline) &&
+                it.originAirport == flightCriteria.origin &&
+                it.destinationAirport == flightCriteria.destination &&
+                it.departureTime.isBetweenDates(flightCriteria.from, flightCriteria.to) &&
                 it.arrivalTime.isBetweenDates(flightCriteria.from, flightCriteria.to)
         }
 
@@ -67,8 +72,9 @@ class FlightFileManager(
                 airline = AirlineCode.fromValue(it[1].replace(" ", "_"))!!,
                 departureTime = ZonedDateTime.parse(it[3]),
                 arrivalTime = ZonedDateTime.parse(it[5]),
-                originAirport = it[8],
-                destinationAirport = it[12]
+                originAirport = AirportCode.fromPartialValue(it[7])!!,
+                destinationAirport = AirportCode.fromPartialValue(it[11])!!,
+                price = it[15].toCustomBigDecimal()
             )
         }
     }
