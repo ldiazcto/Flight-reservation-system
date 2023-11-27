@@ -3,6 +3,7 @@ package edu.fiuba.reservations.utils
 import edu.fiuba.reservations.logger
 import edu.fiuba.reservations.utils.Constants.ARGENTINE_TIME_ZONE
 import edu.fiuba.reservations.utils.Constants.ARGENTINE_ZONE
+import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -49,6 +50,16 @@ fun String.toDateFromPatternWithHours(pattern: String): ZonedDateTime? {
     } catch (e: Exception) {
         log.warn("Error converting string to date. String: $this")
         null
+    }
+}
+
+fun String.toCustomBigDecimal(): BigDecimal {
+    val value = BigDecimal(substring(0, lastIndex)).movePointLeft(2)
+
+    return when (this[lastIndex]) {
+        '+' -> value
+        '-' -> value.multiply(BigDecimal.ONE.negate())
+        else -> value
     }
 }
 
