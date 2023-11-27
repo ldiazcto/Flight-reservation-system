@@ -21,3 +21,7 @@ inline fun <reified T> EnumCompanion<T>.fromCode(value: String): T? where T : En
 inline fun <reified T> EnumCompanion<T>.fromValue(value: String): T? where T : Enum<T>, T : EnumUtil {
     return enumValues<T>().firstOrNull { it.name == value.uppercase() }
 }
+
+inline fun <reified T> EnumCompanion<T>.fromPartialValue(value: String): T? where T : Enum<T>, T : EnumUtil {
+    return enumValues<T>().firstOrNull { it.name.contains(value.uppercase()) }
+}
