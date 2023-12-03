@@ -1,22 +1,23 @@
 package edu.fiuba.reservations.infrastructure.client.file
 
+import edu.fiuba.reservations.application.exception.ExceptionCode
+import edu.fiuba.reservations.domain.entity.Error
+import edu.fiuba.reservations.domain.entity.Flight
 import edu.fiuba.reservations.domain.entity.FlightCriteria
 import edu.fiuba.reservations.domain.entity.FlightSearch
 import edu.fiuba.reservations.domain.enums.AirlineCode
-import edu.fiuba.reservations.domain.enums.AirportCode
-import edu.fiuba.reservations.domain.enums.fromPartialValue
-import edu.fiuba.reservations.domain.enums.fromValue
+import edu.fiuba.reservations.domain.exception.ResourceNotFoundException
 import edu.fiuba.reservations.logger
 import edu.fiuba.reservations.utils.ifNotNull
 import edu.fiuba.reservations.utils.isBetweenDates
-import edu.fiuba.reservations.utils.toCustomBigDecimal
+import edu.fiuba.reservations.utils.isNotNull
 import org.apache.commons.csv.CSVFormat
+import org.apache.commons.csv.CSVRecord
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.io.IOException
 import java.io.InputStream
-import java.time.ZonedDateTime
 
 class FlightFileManager(
     private val filePath: String
@@ -24,19 +25,36 @@ class FlightFileManager(
     private val log by logger()
 
     fun getFlights(flightCriteria: FlightCriteria): List<FlightSearch> {
-        val flights = readFile().filter {
-            isSameAirline(flightCriteria.airline, it.airline) &&
-                it.originAirport == flightCriteria.origin &&
-                it.destinationAirport == flightCriteria.destination &&
-                it.departureTime.isBetweenDates(flightCriteria.from, flightCriteria.to) &&
-                it.arrivalTime.isBetweenDates(flightCriteria.from, flightCriteria.to)
-        }
+        val flights = readFile(FlightSearch::class.java)
+            .filter {
+                isSameAirline(flightCriteria.airline, it.airline) &&
+                    it.originAirport == flightCriteria.origin &&
+                    it.destinationAirport == flightCriteria.destination &&
+                    it.plannedDepartureTime.isBetweenDates(flightCriteria.from, flightCriteria.to) &&
+                    it.plannedArrivalTime.isBetweenDates(flightCriteria.from, flightCriteria.to)
+            }
 
         return flights
     }
 
-    private fun readFile(): List<FlightSearch> {
-        var flights: List<FlightSearch> = listOf()
+    fun getFlight(id: String): Flight {
+        val flight = readFile(Flight::class.java)
+            .firstOrNull { it.id.equals(id, true) }
+
+        if (flight.isNotNull()) {
+            return flight!!
+        }
+
+        throw ResourceNotFoundException(
+            message = ExceptionCode.FLIGHT_NOT_FOUND.getMessage(),
+            errors = listOf(
+                Error(ExceptionCode.FLIGHT_NOT_FOUND)
+            )
+        )
+    }
+
+    private fun <T> readFile(entityClass: Class<T>): List<T> {
+        var records: List<T> = listOf()
         var inputStream: InputStream? = null
         val classLoader = javaClass.getClassLoader()
 
@@ -44,39 +62,33 @@ class FlightFileManager(
             val file = File(classLoader.getResource(filePath)?.file ?: String())
             inputStream = FileInputStream(file)
 
-            flights = processCsv(inputStream)
+            records = processCsv(inputStream, entityClass)
         } catch (e: FileNotFoundException) {
-            log.error("Threw a FileNotFoundException in FlightFileManager::getFlights", e)
+            log.error("Threw a FileNotFoundException in FlightFileManager::readFile", e)
         }
 
         inputStream.ifNotNull {
             try {
                 inputStream?.close()
             } catch (e: IOException) {
-                log.error("Threw a IOException in FlightFileManager::getFlights", e)
+                log.error("Threw a IOException in FlightFileManager::readFile", e)
             }
         }
 
-        return flights
+        return records
     }
 
-    private fun processCsv(inputStream: InputStream): List<FlightSearch> {
+    private fun <T> processCsv(inputStream: InputStream, entityClass: Class<T>): List<T> {
         val csvParser = CSVFormat.Builder.create(CSVFormat.DEFAULT).apply {
             setHeader()
             setSkipHeaderRecord(true)
-        }.build().parse(inputStream.reader())
+        }.build()
 
-        return csvParser.map {
-            FlightSearch(
-                id = it.first(),
-                airline = AirlineCode.fromValue(it[1].replace(" ", "_"))!!,
-                departureTime = ZonedDateTime.parse(it[3]),
-                arrivalTime = ZonedDateTime.parse(it[5]),
-                originAirport = AirportCode.fromPartialValue(it[7])!!,
-                destinationAirport = AirportCode.fromPartialValue(it[11])!!,
-                price = it[15].toCustomBigDecimal()
-            )
+        val records = csvParser.parse(inputStream.reader()).map {
+            entityClass.getDeclaredConstructor(CSVRecord::class.java).newInstance(it)
         }
+
+        return records
     }
 
     private fun isSameAirline(expected: AirlineCode, actual: AirlineCode): Boolean {
