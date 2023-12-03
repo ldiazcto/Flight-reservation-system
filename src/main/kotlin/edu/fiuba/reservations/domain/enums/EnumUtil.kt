@@ -10,7 +10,7 @@ interface EnumUtil {
 
     @JsonValue
     fun getEnumName(): String {
-        return name.lowercase()
+        return name.uppercase()
     }
 }
 
