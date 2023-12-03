@@ -7,6 +7,7 @@ import edu.fiuba.reservations.domain.enums.FlightType
 import edu.fiuba.reservations.domain.enums.StateCode
 import edu.fiuba.reservations.domain.enums.fromPartialValue
 import edu.fiuba.reservations.domain.enums.fromValue
+import edu.fiuba.reservations.infrastructure.client.file.header.FlightHeader
 import edu.fiuba.reservations.utils.toCustomBigDecimal
 import org.apache.commons.csv.CSVRecord
 import java.math.BigDecimal
@@ -31,25 +32,25 @@ data class Flight(
     val price: BigDecimal
 ) {
     constructor(entity: CSVRecord) : this(
-        id = entity.get("flight_id"),
-        airline = AirlineCode.fromValue(entity.get("airline").replace(" ", "_"))!!,
-        type = FlightType.fromValue(entity.get("flight_type"))!!,
-        originAirport = AirportCode.fromPartialValue(entity.get("origin_airport"))!!,
-        originCity = entity.get("origin_city"),
+        id = entity.get(FlightHeader.FLIGHT_ID.label),
+        airline = AirlineCode.fromValue(entity.get(FlightHeader.AIRLINE.label).replace(" ", "_"))!!,
+        type = FlightType.fromValue(entity.get(FlightHeader.FLIGHT_TYPE.label))!!,
+        originAirport = AirportCode.fromPartialValue(entity.get(FlightHeader.ORIGIN_AIRPORT.label))!!,
+        originCity = entity.get(FlightHeader.ORIGIN_CITY.label),
         originState = StateCode.fromValue(
-            "${entity.get("origin_country").substring(0, 2)}_${entity.get("origin_state")}"
+            "${entity.get(FlightHeader.ORIGIN_COUNTRY.label).substring(0, 2)}_${entity.get(FlightHeader.ORIGIN_STATE.label)}"
         )!!,
-        originCountry = CountryCode.fromValue(entity.get("origin_country").substring(0, 3))!!,
-        destinationAirport = AirportCode.fromPartialValue(entity.get("destination_airport"))!!,
-        destinationCity = entity.get("destination_city"),
+        originCountry = CountryCode.fromValue(entity.get(FlightHeader.ORIGIN_COUNTRY.label).substring(0, 3))!!,
+        destinationAirport = AirportCode.fromPartialValue(entity.get(FlightHeader.DESTINATION_AIRPORT.label))!!,
+        destinationCity = entity.get(FlightHeader.DESTINATION_CITY.label),
         destinationState = StateCode.fromValue(
-            "${entity.get("destination_country").substring(0, 2)}_${entity.get("destination_state")}"
+            "${entity.get(FlightHeader.DESTINATION_COUNTRY.label).substring(0, 2)}_${entity.get(FlightHeader.DESTINATION_STATE.label)}"
         )!!,
-        destinationCountry = CountryCode.fromValue(entity.get("destination_country").substring(0, 3))!!,
-        plannedDepartureTime = ZonedDateTime.parse(entity.get("planned_departure")),
-        realDepartureTime = ZonedDateTime.parse(entity.get("real_departure")),
-        plannedArrivalTime = ZonedDateTime.parse(entity.get("planned_arrival")),
-        realArrivalTime = ZonedDateTime.parse(entity.get("real_arrival")),
-        price = entity.get("price").toCustomBigDecimal()
+        destinationCountry = CountryCode.fromValue(entity.get(FlightHeader.DESTINATION_COUNTRY.label).substring(0, 3))!!,
+        plannedDepartureTime = ZonedDateTime.parse(entity.get(FlightHeader.PLANNED_DEPARTURE.label)),
+        realDepartureTime = ZonedDateTime.parse(entity.get(FlightHeader.REAL_DEPARTURE.label)),
+        plannedArrivalTime = ZonedDateTime.parse(entity.get(FlightHeader.PLANNED_ARRIVAL.label)),
+        realArrivalTime = ZonedDateTime.parse(entity.get(FlightHeader.REAL_ARRIVAL.label)),
+        price = entity.get(FlightHeader.PRICE.label).toCustomBigDecimal()
     )
 }
