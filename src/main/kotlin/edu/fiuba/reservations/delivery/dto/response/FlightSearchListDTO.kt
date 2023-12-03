@@ -6,7 +6,7 @@ import edu.fiuba.reservations.domain.enums.AirportCode
 import java.math.BigDecimal
 import java.time.ZonedDateTime
 
-class FlightSearchListDTO(
+data class FlightSearchListDTO(
     val flights: List<FlightSearchDTO>
 ) {
     data class FlightSearchDTO(
@@ -14,8 +14,8 @@ class FlightSearchListDTO(
         val airline: AirlineCode,
         val originAirport: AirportCode,
         val destinationAirport: AirportCode,
-        val departureTime: ZonedDateTime,
-        val arrivalTime: ZonedDateTime,
+        val plannedDepartureTime: ZonedDateTime,
+        val plannedArrivalTime: ZonedDateTime,
         val price: BigDecimal
     ) {
         constructor(entity: FlightSearch) : this(
@@ -23,8 +23,8 @@ class FlightSearchListDTO(
             airline = entity.airline,
             originAirport = entity.originAirport,
             destinationAirport = entity.destinationAirport,
-            departureTime = entity.departureTime,
-            arrivalTime = entity.arrivalTime,
+            plannedDepartureTime = entity.plannedDepartureTime,
+            plannedArrivalTime = entity.plannedArrivalTime,
             price = entity.price
         )
     }
