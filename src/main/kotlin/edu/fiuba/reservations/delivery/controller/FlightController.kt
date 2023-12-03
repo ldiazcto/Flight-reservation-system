@@ -2,6 +2,7 @@ package edu.fiuba.reservations.delivery.controller
 
 import edu.fiuba.reservations.delivery.dto.request.FlightCriteriaDTO
 import edu.fiuba.reservations.delivery.dto.request.builder.FlightCriteriaDTOBuilder
+import edu.fiuba.reservations.delivery.dto.response.FlightDTO
 import edu.fiuba.reservations.delivery.dto.response.FlightSearchListDTO
 import edu.fiuba.reservations.delivery.dto.response.FlightSearchListDTO.FlightSearchDTO
 import edu.fiuba.reservations.delivery.validator.FlightCriteriaDTOValidator
@@ -18,5 +19,9 @@ class FlightController(
                 FlightSearchDTO(it)
             }
         )
+    }
+
+    fun getFlight(id: String): FlightDTO {
+        return FlightDTO(flightService.getFlight(id))
     }
 }
