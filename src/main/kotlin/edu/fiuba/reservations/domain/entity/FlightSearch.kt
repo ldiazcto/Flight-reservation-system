@@ -22,8 +22,8 @@ data class FlightSearch(
     constructor(entity: CSVRecord) : this(
         id = entity.get(FlightHeader.FLIGHT_ID.label),
         airline = AirlineCode.fromValue(entity.get(FlightHeader.AIRLINE.label).replace(" ", "_"))!!,
-        originAirport = AirportCode.fromPartialValue(entity.get(FlightHeader.ORIGIN_AIRPORT.label))!!,
-        destinationAirport = AirportCode.fromPartialValue(entity.get(FlightHeader.DESTINATION_AIRPORT.label))!!,
+        originAirport = AirportCode.fromPartialValue(entity.get(FlightHeader.ORIGIN_AIRPORT.label).replace(" ", "_"))!!,
+        destinationAirport = AirportCode.fromPartialValue(entity.get(FlightHeader.DESTINATION_AIRPORT.label).replace(" ", "_"))!!,
         plannedDepartureTime = ZonedDateTime.parse(entity.get(FlightHeader.PLANNED_DEPARTURE.label)),
         plannedArrivalTime = ZonedDateTime.parse(entity.get(FlightHeader.PLANNED_ARRIVAL.label)),
         price = entity.get(FlightHeader.PRICE.label).toCustomBigDecimal()

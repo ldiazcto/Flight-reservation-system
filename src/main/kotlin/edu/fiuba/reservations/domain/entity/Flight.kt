@@ -35,13 +35,13 @@ data class Flight(
         id = entity.get(FlightHeader.FLIGHT_ID.label),
         airline = AirlineCode.fromValue(entity.get(FlightHeader.AIRLINE.label).replace(" ", "_"))!!,
         type = FlightType.fromValue(entity.get(FlightHeader.FLIGHT_TYPE.label))!!,
-        originAirport = AirportCode.fromPartialValue(entity.get(FlightHeader.ORIGIN_AIRPORT.label))!!,
+        originAirport = AirportCode.fromPartialValue(entity.get(FlightHeader.ORIGIN_AIRPORT.label).replace(" ", "_"))!!,
         originCity = entity.get(FlightHeader.ORIGIN_CITY.label),
         originState = StateCode.fromValue(
             "${entity.get(FlightHeader.ORIGIN_COUNTRY.label).substring(0, 2)}_${entity.get(FlightHeader.ORIGIN_STATE.label)}"
         )!!,
         originCountry = CountryCode.fromValue(entity.get(FlightHeader.ORIGIN_COUNTRY.label).substring(0, 3))!!,
-        destinationAirport = AirportCode.fromPartialValue(entity.get(FlightHeader.DESTINATION_AIRPORT.label))!!,
+        destinationAirport = AirportCode.fromPartialValue(entity.get(FlightHeader.DESTINATION_AIRPORT.label).replace(" ", "_"))!!,
         destinationCity = entity.get(FlightHeader.DESTINATION_CITY.label),
         destinationState = StateCode.fromValue(
             "${entity.get(FlightHeader.DESTINATION_COUNTRY.label).substring(0, 2)}_${entity.get(FlightHeader.DESTINATION_STATE.label)}"
