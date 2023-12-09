@@ -1,6 +1,7 @@
 package edu.fiuba.reservations.infrastructure.client.persistence.repository
 
 import com.google.cloud.firestore.CollectionReference
+import edu.fiuba.reservations.utils.isNotNullAndBlank
 import org.apache.commons.beanutils.PropertyUtils
 
 abstract class GenericRepositoryImpl<T>(
@@ -15,6 +16,17 @@ abstract class GenericRepositoryImpl<T>(
             val `object` = document.toObject(clazz)!!
             PropertyUtils.setProperty(`object`, "id", document.id)
             return `object`
+        }
+
+        throw Exception()
+    }
+
+    override fun save(entity: T): T {
+        val futureDocument = getCollection().add(entity)
+        val document = futureDocument.get()
+
+        if (document.id.isNotNullAndBlank()) {
+            return entity
         }
 
         throw Exception()
