@@ -6,4 +6,5 @@ object Constants {
     const val DATE_PATTERN = "yyyy-MM-dd"
     const val DATETIME_RFC3339_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
     const val DATETIME_PATTERN = "yyyy-MM-dd-HH.mm.ss.SSSSSS"
+    const val FLIGHT_ID_LENGTH = 8
 }

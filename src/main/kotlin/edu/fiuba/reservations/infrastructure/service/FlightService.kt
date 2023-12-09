@@ -1,6 +1,7 @@
 package edu.fiuba.reservations.infrastructure.service
 
 import edu.fiuba.reservations.delivery.dto.request.FlightCriteriaDTO
+import edu.fiuba.reservations.domain.entity.Flight
 import edu.fiuba.reservations.domain.entity.FlightSearch
 import edu.fiuba.reservations.domain.entity.builder.FlightCriteriaBuilder
 import edu.fiuba.reservations.domain.validator.FlightCriteriaValidator
@@ -15,5 +16,9 @@ class FlightService(
         val validatedFlightCriteria = FlightCriteriaBuilder(FlightCriteriaValidator()).build(flightCriteria)
 
         return flightFileManager.getFlights(validatedFlightCriteria)
+    }
+
+    fun getFlight(id: String): Flight {
+        return flightFileManager.getFlight(id)
     }
 }

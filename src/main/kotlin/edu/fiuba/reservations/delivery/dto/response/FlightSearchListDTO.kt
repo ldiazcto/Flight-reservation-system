@@ -1,12 +1,14 @@
 package edu.fiuba.reservations.delivery.dto.response
 
+import com.fasterxml.jackson.annotation.JsonFormat
 import edu.fiuba.reservations.domain.entity.FlightSearch
 import edu.fiuba.reservations.domain.enums.AirlineCode
 import edu.fiuba.reservations.domain.enums.AirportCode
+import edu.fiuba.reservations.utils.Constants
 import java.math.BigDecimal
 import java.time.ZonedDateTime
 
-class FlightSearchListDTO(
+data class FlightSearchListDTO(
     val flights: List<FlightSearchDTO>
 ) {
     data class FlightSearchDTO(
@@ -14,8 +16,10 @@ class FlightSearchListDTO(
         val airline: AirlineCode,
         val originAirport: AirportCode,
         val destinationAirport: AirportCode,
-        val departureTime: ZonedDateTime,
-        val arrivalTime: ZonedDateTime,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constants.DATETIME_RFC3339_PATTERN, timezone = Constants.ARGENTINE_TIME_ZONE)
+        val plannedDepartureTime: ZonedDateTime,
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = Constants.DATETIME_RFC3339_PATTERN, timezone = Constants.ARGENTINE_TIME_ZONE)
+        val plannedArrivalTime: ZonedDateTime,
         val price: BigDecimal
     ) {
         constructor(entity: FlightSearch) : this(
@@ -23,8 +27,8 @@ class FlightSearchListDTO(
             airline = entity.airline,
             originAirport = entity.originAirport,
             destinationAirport = entity.destinationAirport,
-            departureTime = entity.departureTime,
-            arrivalTime = entity.arrivalTime,
+            plannedDepartureTime = entity.plannedDepartureTime,
+            plannedArrivalTime = entity.plannedArrivalTime,
             price = entity.price
         )
     }

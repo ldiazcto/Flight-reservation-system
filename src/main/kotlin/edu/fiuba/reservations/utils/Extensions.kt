@@ -10,6 +10,10 @@ inline fun <T, R> T?.ifNotNullAndBlank(callback: (T) -> R): R? where T : String?
     return if (isNotNullAndBlank()) this?.let(callback) else null
 }
 
+fun Any?.isNotNull(): Boolean {
+    return this.isNull().not()
+}
+
 fun Any?.isNull(): Boolean {
     return this == null
 }
