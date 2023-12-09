@@ -7,4 +7,5 @@ object Constants {
     const val DATETIME_RFC3339_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX"
     const val DATETIME_PATTERN = "yyyy-MM-dd-HH.mm.ss.SSSSSS"
     const val FLIGHT_ID_LENGTH = 8
+    const val RESERVATION_ID_LENGTH = 6
 }
