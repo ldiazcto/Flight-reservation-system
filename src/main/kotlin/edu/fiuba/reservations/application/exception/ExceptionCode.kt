@@ -7,6 +7,7 @@ enum class ExceptionCode(
     private val message: String
 ) : Exception {
     FLIGHT_NOT_FOUND("flight.not.found", "The flight was not found"),
+    RESERVATION_NOT_FOUND("reservation.not.found", "The reservation was not found"),
     INVALID_FLIGHT_CRITERIA("error.params", "The flight criteria provided is not valid"),
     INVALID_FLIGHT_ID("error.params", "The flight id provided is not valid, its length must be 8 characters"),
     INVALID_RESERVATION_ID("error.params", "The reservation id provided is not valid, its length must be 6 characters"),
