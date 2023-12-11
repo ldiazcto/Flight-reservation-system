@@ -8,4 +8,7 @@ object Constants {
     const val DATETIME_PATTERN = "yyyy-MM-dd-HH.mm.ss.SSSSSS"
     const val FLIGHT_ID_LENGTH = 8
     const val RESERVATION_ID_LENGTH = 6
+    val INTEGER_REGEX = """^\d+${'$'}""".toRegex()
+    val DOUBLE_REGEX = """^[0-9]+\.[0-9]{1,2}${'$'}""".toRegex()
+    val EMAIL_REGEX = """^[\w-\\.]+@([\w-]+\.)+[\w-]{2,4}${'$'}""".toRegex()
 }
