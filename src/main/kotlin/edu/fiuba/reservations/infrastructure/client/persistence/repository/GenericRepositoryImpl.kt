@@ -5,18 +5,25 @@ import edu.fiuba.reservations.application.exception.ExceptionCode.DATABASE_INTER
 import edu.fiuba.reservations.domain.entity.Error
 import edu.fiuba.reservations.domain.exception.ReservationException
 import edu.fiuba.reservations.utils.isNotNullAndBlank
+import edu.fiuba.reservations.utils.isNull
+import org.apache.commons.beanutils.PropertyUtils
 import org.springframework.http.HttpStatus
 
 abstract class GenericRepositoryImpl<T>(
     private val clazz: Class<T>
 ) : GenericRepository<T> {
-    override fun get(id: String): T {
-        val query = getCollection().whereEqualTo("id", id)
+    override fun get(entityId: String): T {
+        val query = getCollection().whereEqualTo("id", entityId)
         val futureDocument = query.get()
-        val document = futureDocument.get().documents.first()
+        val documents = futureDocument.get().documents
 
-        if (document.exists()) {
-            return document.toObject(clazz)!!
+        if (documents.isNotEmpty() && documents.first().exists()) {
+            val document = documents.first()
+            val `object` = document.toObject(clazz)!!
+
+            PropertyUtils.setProperty(`object`, "documentId", document.id)
+
+            return `object`
         }
 
         throw ReservationException(
@@ -45,6 +52,21 @@ abstract class GenericRepositoryImpl<T>(
                 Error(DATABASE_INTERNAL_ERROR)
             )
         )
+    }
+
+    override fun delete(documentId: String) {
+        val writeResult = getCollection().document(documentId).delete()
+
+        if (writeResult.get().updateTime.isNull()) {
+            throw ReservationException(
+                DATABASE_INTERNAL_ERROR.getMessage(),
+                DATABASE_INTERNAL_ERROR.getCode(),
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                listOf(
+                    Error(DATABASE_INTERNAL_ERROR)
+                )
+            )
+        }
     }
 
     abstract fun getCollection(): CollectionReference

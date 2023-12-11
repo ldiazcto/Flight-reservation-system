@@ -12,12 +12,16 @@ class ReservationService(
     private val reservationPersistence: ReservationPersistence
 ) {
     fun getReservation(id: String): Reservation {
-        return reservationPersistence.getReservation(id)
+        return reservationPersistence.getReservation(id).second
     }
 
     fun createReservation(body: CreateReservationDTO): String {
         val reservation = ReservationBuilder(ReservationValidator()).build(body)
 
         return reservationPersistence.createReservation(reservation).id
+    }
+
+    fun deleteReservation(id: String) {
+        reservationPersistence.deleteReservation(id)
     }
 }

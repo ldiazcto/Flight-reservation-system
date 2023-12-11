@@ -2,6 +2,8 @@ package edu.fiuba.reservations.delivery.validator
 
 import edu.fiuba.reservations.delivery.dto.request.CreateReservationDTO
 import edu.fiuba.reservations.delivery.dto.response.CustomerDTO
+import edu.fiuba.reservations.delivery.dto.response.DocumentDTO
+import edu.fiuba.reservations.delivery.dto.response.PhoneDTO
 import edu.fiuba.reservations.domain.enums.AirlineCode
 import edu.fiuba.reservations.domain.enums.AirportCode
 import edu.fiuba.reservations.utils.enums.Exception
@@ -127,6 +129,98 @@ class CreateReservationDTOValidator : BaseValidator(), Validator<CreateReservati
         if (data.customer.isNull()) {
             exceptions.add(
                 generateRequiredFieldException(fieldNames.plus(CreateReservationDTO::customer.name))
+            )
+        } else {
+            exceptions.addAll(
+                validateRequiredFields(data.customer!!, fieldNames.plus(CreateReservationDTO::customer.name))
+            )
+        }
+
+        return exceptions
+    }
+
+    private fun validateRequiredFields(data: CustomerDTO, fieldNames: List<String>): List<Exception> {
+        val exceptions = ArrayList<Exception>()
+
+        if (data.firstName.isNullOrBlank()) {
+            exceptions.add(
+                generateRequiredFieldException(fieldNames.plus(CustomerDTO::firstName.name))
+            )
+        }
+
+        if (data.lastName.isNullOrBlank()) {
+            exceptions.add(
+                generateRequiredFieldException(fieldNames.plus(CustomerDTO::lastName.name))
+            )
+        }
+
+        if (data.documents.isNullOrEmpty()) {
+            exceptions.add(
+                generateRequiredFieldException(fieldNames.plus(CustomerDTO::documents.name))
+            )
+        } else {
+            data.documents.forEach {
+                exceptions.addAll(
+                    validateRequiredFields(it, fieldNames.plus(CustomerDTO::documents.name))
+                )
+            }
+        }
+
+        if (data.email.isNullOrBlank()) {
+            exceptions.add(
+                generateRequiredFieldException(fieldNames.plus(CustomerDTO::email.name))
+            )
+        }
+
+        if (data.phone.isNull()) {
+            exceptions.add(
+                generateRequiredFieldException(fieldNames.plus(CustomerDTO::phone.name))
+            )
+        } else {
+            exceptions.addAll(
+                validateRequiredFields(data.phone!!, fieldNames.plus(CustomerDTO::phone.name))
+            )
+        }
+
+        return exceptions
+    }
+
+    private fun validateRequiredFields(data: DocumentDTO, fieldNames: List<String>): List<Exception> {
+        val exceptions = ArrayList<Exception>()
+
+        if (data.type.isNullOrBlank()) {
+            exceptions.add(
+                generateRequiredFieldException(fieldNames.plus(DocumentDTO::type.name))
+            )
+        }
+
+        if (data.number.isNullOrBlank()) {
+            exceptions.add(
+                generateRequiredFieldException(fieldNames.plus(DocumentDTO::number.name))
+            )
+        }
+
+        return exceptions
+    }
+
+    private fun validateRequiredFields(data: PhoneDTO, fieldNames: List<String>): List<Exception> {
+        val exceptions = ArrayList<Exception>()
+
+        if (data.type.isNullOrBlank()) {
+            exceptions.add(
+                generateRequiredFieldException(fieldNames.plus(PhoneDTO::type.name))
+            )
+        }
+
+        if (data.areaCode.isNullOrBlank()) {
+            exceptions.add(
+                generateRequiredFieldException(fieldNames.plus(PhoneDTO::areaCode.name))
+            )
+        }
+
+        if (data.number.isNullOrBlank()) {
+            exceptions.add(
+                generateRequiredFieldException(fieldNames.plus(PhoneDTO::number.name))
             )
         }
 
