@@ -1,17 +1,23 @@
 package edu.fiuba.reservations.delivery.dto.request
 
 import edu.fiuba.reservations.delivery.dto.response.CustomerDTO
-import edu.fiuba.reservations.domain.enums.AirlineCode
-import edu.fiuba.reservations.domain.enums.AirportCode
-import java.math.BigDecimal
-import java.time.ZonedDateTime
 
 data class CreateReservationDTO(
-    val flightDate: ZonedDateTime?,
-    val airline: AirlineCode?,
-    val origin: AirportCode?,
-    val destination: AirportCode?,
-    val passengersQuantity: Int?,
-    val totalPrice: BigDecimal?,
+    val flightDate: String?,
+    val airline: String?,
+    val origin: String?,
+    val destination: String?,
+    val passengersQuantity: String?,
+    val totalPrice: String?,
     val customer: CustomerDTO?
-)
+) {
+    constructor(entity: CreateReservationDTO) : this(
+        flightDate = entity.flightDate,
+        airline = entity.airline,
+        origin = entity.origin,
+        destination = entity.destination,
+        passengersQuantity = entity.passengersQuantity,
+        totalPrice = entity.totalPrice,
+        customer = entity.customer?.let { CustomerDTO(it) }
+    )
+}

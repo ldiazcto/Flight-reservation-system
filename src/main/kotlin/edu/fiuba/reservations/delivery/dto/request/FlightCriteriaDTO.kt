@@ -11,10 +11,10 @@ data class FlightCriteriaDTO(
     val to: String?
 ) {
     constructor(entity: FlightCriteriaDTO) : this(
-        entity.airline,
-        entity.origin,
-        entity.destination,
-        entity.from,
-        entity.to
+        airline = entity.airline,
+        origin = entity.origin,
+        destination = entity.destination,
+        from = entity.from,
+        to = entity.to
     )
 }

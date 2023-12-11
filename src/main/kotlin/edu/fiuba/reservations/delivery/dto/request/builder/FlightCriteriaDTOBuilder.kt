@@ -1,6 +1,6 @@
 package edu.fiuba.reservations.delivery.dto.request.builder
 
-import edu.fiuba.reservations.application.exception.ExceptionCode
+import edu.fiuba.reservations.application.exception.ExceptionCode.INVALID_FLIGHT_CRITERIA
 import edu.fiuba.reservations.delivery.dto.request.FlightCriteriaDTO
 import edu.fiuba.reservations.delivery.validator.FlightCriteriaDTOValidator
 import edu.fiuba.reservations.domain.entity.Error
@@ -16,8 +16,8 @@ class FlightCriteriaDTOBuilder(
             return FlightCriteriaDTO(data)
         } else {
             throw BadRequestException(
-                ExceptionCode.INVALID_FLIGHT_CRITERIA.getMessage(),
-                ExceptionCode.INVALID_FLIGHT_CRITERIA.getCode(),
+                INVALID_FLIGHT_CRITERIA.getMessage(),
+                INVALID_FLIGHT_CRITERIA.getCode(),
                 exceptions.map { Error(it) }
             )
         }
