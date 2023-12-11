@@ -53,6 +53,10 @@ fun String.toDateFromPatternWithHours(pattern: String): ZonedDateTime? {
     }
 }
 
+fun ZonedDateTime.formatToString(pattern: String): String {
+    return DateTimeFormatter.ofPattern(pattern).format(this.withZoneSameInstant(ZoneId.of(ARGENTINE_ZONE)))
+}
+
 fun String.toCustomBigDecimal(): BigDecimal {
     val value = BigDecimal(substring(0, lastIndex)).movePointLeft(2)
 

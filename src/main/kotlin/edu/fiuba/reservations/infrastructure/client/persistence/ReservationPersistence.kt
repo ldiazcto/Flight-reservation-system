@@ -19,6 +19,14 @@ class ReservationPersistence(
         )
     }
 
+    fun createReservation(reservation: Reservation): Reservation {
+        return ReservationEntityMapper.toReservationDomain(
+            save(
+                ReservationEntityMapper.toReservationEntity(reservation)
+            )
+        )
+    }
+
     override fun getCollection(): CollectionReference {
         return firestore.collection(collectionName)
     }

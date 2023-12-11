@@ -8,7 +8,8 @@ enum class ExceptionCode(
 ) : Exception {
     FLIGHT_NOT_FOUND("flight.not.found", "The flight was not found"),
     INVALID_FLIGHT_CRITERIA("error.params", "The flight criteria provided is not valid"),
-    INVALID_FLIGHT_ID("error.params", "The flight id provided is not valid, its length must be 8 characters");
+    INVALID_FLIGHT_ID("error.params", "The flight id provided is not valid, its length must be 8 characters"),
+    DATABASE_INTERNAL_ERROR("internal.error", "There was an error at operating with the database");
 
     override fun getCode(): String = code
     override fun getMessage(): String = message

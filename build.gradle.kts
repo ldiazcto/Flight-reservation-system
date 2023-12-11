@@ -28,8 +28,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("com.google.firebase:firebase-admin:9.2.0")
     implementation("io.micrometer:micrometer-registry-prometheus")
-    implementation("commons-beanutils:commons-beanutils:1.9.4")
     implementation("org.apache.commons:commons-csv:1.10.0")
+    implementation("org.apache.commons:commons-lang3:3.14.0")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
