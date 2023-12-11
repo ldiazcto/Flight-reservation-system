@@ -12,7 +12,7 @@ class ReservationService(
     private val reservationPersistence: ReservationPersistence
 ) {
     fun getReservation(id: String): Reservation {
-        return reservationPersistence.getReservation(id)
+        return reservationPersistence.getReservation(id).second
     }
 
     fun createReservation(body: CreateReservationDTO): String {
