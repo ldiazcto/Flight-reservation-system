@@ -20,4 +20,8 @@ class ReservationService(
 
         return reservationPersistence.createReservation(reservation).id
     }
+
+    fun deleteReservation(id: String) {
+        reservationPersistence.deleteReservation(id)
+    }
 }
