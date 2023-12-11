@@ -1,24 +1,32 @@
 package edu.fiuba.reservations.infrastructure.client.persistence.repository
 
 import com.google.cloud.firestore.CollectionReference
+import edu.fiuba.reservations.application.exception.ExceptionCode.DATABASE_INTERNAL_ERROR
+import edu.fiuba.reservations.domain.entity.Error
+import edu.fiuba.reservations.domain.exception.ReservationException
 import edu.fiuba.reservations.utils.isNotNullAndBlank
-import org.apache.commons.beanutils.PropertyUtils
+import org.springframework.http.HttpStatus
 
 abstract class GenericRepositoryImpl<T>(
     private val clazz: Class<T>
 ) : GenericRepository<T> {
     override fun get(id: String): T {
-        val reference = getCollection().document(id)
-        val futureDocument = reference.get()
-        val document = futureDocument.get()
+        val query = getCollection().whereEqualTo("id", id)
+        val futureDocument = query.get()
+        val document = futureDocument.get().documents.first()
 
         if (document.exists()) {
-            val `object` = document.toObject(clazz)!!
-            PropertyUtils.setProperty(`object`, "id", document.id)
-            return `object`
+            return document.toObject(clazz)!!
         }
 
-        throw Exception()
+        throw ReservationException(
+            DATABASE_INTERNAL_ERROR.getMessage(),
+            DATABASE_INTERNAL_ERROR.getCode(),
+            HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            listOf(
+                Error(DATABASE_INTERNAL_ERROR)
+            )
+        )
     }
 
     override fun save(entity: T): T {
@@ -29,7 +37,14 @@ abstract class GenericRepositoryImpl<T>(
             return entity
         }
 
-        throw Exception()
+        throw ReservationException(
+            DATABASE_INTERNAL_ERROR.getMessage(),
+            DATABASE_INTERNAL_ERROR.getCode(),
+            HttpStatus.INTERNAL_SERVER_ERROR.value(),
+            listOf(
+                Error(DATABASE_INTERNAL_ERROR)
+            )
+        )
     }
 
     abstract fun getCollection(): CollectionReference
