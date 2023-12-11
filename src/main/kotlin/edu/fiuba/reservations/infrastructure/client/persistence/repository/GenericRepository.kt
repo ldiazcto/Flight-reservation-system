@@ -4,4 +4,6 @@ interface GenericRepository<T> {
     fun get(id: String): T
 
     fun save(entity: T): T
+
+    fun delete(id: String)
 }
