@@ -17,10 +17,13 @@ class ReservationPersistence(
     private val firestore: Firestore
 ) : ReservationRepository, GenericRepositoryImpl<ReservationEntity>(ReservationEntity::class.java) {
 
-    fun getReservation(id: String): Reservation {
+    fun getReservation(id: String): Pair<String, Reservation> {
         return try {
-            ReservationEntityMapper.toReservationDomain(
-                get(id)
+            val entity = get(id)
+
+            Pair(
+                entity.documentId,
+                ReservationEntityMapper.toReservationDomain(entity)
             )
         } catch (e: ReservationException) {
             throw ResourceNotFoundException(
@@ -41,7 +44,9 @@ class ReservationPersistence(
     }
 
     fun deleteReservation(id: String) {
-        delete(id)
+        val documentId = getReservation(id).first
+
+        delete(documentId)
     }
 
     override fun getCollection(): CollectionReference {
