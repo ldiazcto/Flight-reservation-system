@@ -1,6 +1,6 @@
 package edu.fiuba.reservations.infrastructure.client.file
 
-import edu.fiuba.reservations.application.exception.ExceptionCode
+import edu.fiuba.reservations.application.exception.ExceptionCode.FLIGHT_NOT_FOUND
 import edu.fiuba.reservations.domain.entity.Error
 import edu.fiuba.reservations.domain.entity.Flight
 import edu.fiuba.reservations.domain.entity.FlightCriteria
@@ -46,9 +46,9 @@ class FlightFileManager(
         }
 
         throw ResourceNotFoundException(
-            message = ExceptionCode.FLIGHT_NOT_FOUND.getMessage(),
+            message = FLIGHT_NOT_FOUND.getMessage(),
             errors = listOf(
-                Error(ExceptionCode.FLIGHT_NOT_FOUND)
+                Error(FLIGHT_NOT_FOUND)
             )
         )
     }
