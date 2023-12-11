@@ -1,14 +1,18 @@
 package edu.fiuba.reservations.delivery.dto.response
 
 import edu.fiuba.reservations.domain.entity.Document
-import edu.fiuba.reservations.domain.enums.DocumentType
 
 data class DocumentDTO(
-    val type: DocumentType,
-    val number: String
+    val type: String?,
+    val number: String?
 ) {
-    constructor(entity: Document) : this(
+    constructor(entity: DocumentDTO) : this(
         type = entity.type,
+        number = entity.number
+    )
+
+    constructor(entity: Document) : this(
+        type = entity.type.name,
         number = entity.number
     )
 }
