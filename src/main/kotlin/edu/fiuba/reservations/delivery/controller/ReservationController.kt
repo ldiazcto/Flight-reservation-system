@@ -24,6 +24,12 @@ class ReservationController(
         return ReservationDTO(reservationService.createReservation(validatedCreateReservation))
     }
 
+    fun deleteReservation(id: String) {
+        validateReservationId(id)
+
+        reservationService.deleteReservation(id)
+    }
+
     private fun validateReservationId(id: String) {
         if (id.length != RESERVATION_ID_LENGTH) {
             throw BadRequestException(
