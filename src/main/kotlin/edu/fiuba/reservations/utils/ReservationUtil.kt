@@ -76,3 +76,13 @@ fun getCurrentDate(): String {
 
     return localDateTime.format(formatter)
 }
+
+fun getCurrentDateTime(): String {
+    val formatter = DateTimeFormatter.ofPattern(Constants.DATETIME_RFC3339_PATTERN).apply {
+        withZone(ZoneId.of(ARGENTINE_TIME_ZONE))
+    }
+
+    val localDateTime = ZonedDateTime.now(ZoneId.of(ARGENTINE_TIME_ZONE))
+
+    return localDateTime.format(formatter)
+}
