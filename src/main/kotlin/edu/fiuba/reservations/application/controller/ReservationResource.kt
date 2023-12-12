@@ -2,10 +2,12 @@ package edu.fiuba.reservations.application.controller
 
 import edu.fiuba.reservations.delivery.controller.ReservationController
 import edu.fiuba.reservations.delivery.dto.request.CreateReservationDTO
+import edu.fiuba.reservations.delivery.dto.request.UpdateReservationDTO
 import edu.fiuba.reservations.delivery.dto.response.ReservationDTO
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PatchMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -32,6 +34,15 @@ class ReservationResource(
         @RequestBody body: CreateReservationDTO
     ): ReservationDTO {
         return reservationController.createReservation(body)
+    }
+
+    @PatchMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
+    fun updateReservation(
+        @PathVariable id: String,
+        @RequestBody body: UpdateReservationDTO
+    ): ReservationDTO {
+        return reservationController.updateReservation(id, body)
     }
 
     @DeleteMapping("{id}")

@@ -5,5 +5,7 @@ interface GenericRepository<T> {
 
     fun save(entity: T): T
 
+    fun update(documentId: String, entity: T): T
+
     fun delete(documentId: String)
 }

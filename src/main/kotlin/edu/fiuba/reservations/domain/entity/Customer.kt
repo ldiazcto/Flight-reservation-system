@@ -16,4 +16,14 @@ data class Customer(
         email = entity.email!!,
         phone = Phone(entity.phone!!)
     )
+
+    constructor(entity: Customer, updatedEntity: Customer) : this(
+        firstName = updatedEntity.firstName,
+        lastName = updatedEntity.lastName,
+        documents = updatedEntity.documents.plus(
+            entity.documents.filterNot { doc -> doc.type in updatedEntity.documents.map { it.type } }
+        ),
+        email = updatedEntity.email,
+        phone = updatedEntity.phone
+    )
 }

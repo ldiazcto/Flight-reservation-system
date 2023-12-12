@@ -31,4 +31,15 @@ data class Reservation(
         totalPrice = entity.totalPrice!!.toBigDecimal(),
         customer = Customer(entity.customer!!)
     )
+
+    constructor(entity: Reservation, updatedEntity: Reservation) : this(
+        id = entity.id,
+        flightDate = updatedEntity.flightDate,
+        airline = updatedEntity.airline,
+        origin = updatedEntity.origin,
+        destination = updatedEntity.destination,
+        passengersQuantity = updatedEntity.passengersQuantity,
+        totalPrice = updatedEntity.totalPrice,
+        customer = Customer(entity.customer, updatedEntity.customer)
+    )
 }
