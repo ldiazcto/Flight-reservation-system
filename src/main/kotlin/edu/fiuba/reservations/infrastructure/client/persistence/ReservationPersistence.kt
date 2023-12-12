@@ -43,6 +43,15 @@ class ReservationPersistence(
         )
     }
 
+    fun updateReservation(documentId: String, reservation: Reservation): Reservation {
+        return ReservationEntityMapper.toReservationDomain(
+            update(
+                documentId,
+                ReservationEntityMapper.toReservationEntity(reservation)
+            )
+        )
+    }
+
     fun deleteReservation(id: String) {
         val documentId = getReservation(id).first
 
