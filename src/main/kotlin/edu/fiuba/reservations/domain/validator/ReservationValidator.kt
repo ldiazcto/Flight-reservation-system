@@ -1,6 +1,7 @@
 package edu.fiuba.reservations.domain.validator
 
 import edu.fiuba.reservations.delivery.dto.request.CreateReservationDTO
+import edu.fiuba.reservations.delivery.dto.response.CustomerDTO
 import edu.fiuba.reservations.domain.enums.AirlineCode
 import edu.fiuba.reservations.domain.enums.fromCode
 import edu.fiuba.reservations.utils.Constants.DATETIME_RFC3339_PATTERN
@@ -8,6 +9,7 @@ import edu.fiuba.reservations.utils.enums.Exception
 import edu.fiuba.reservations.utils.generateAirlineCodeException
 import edu.fiuba.reservations.utils.getCurrentDateTime
 import edu.fiuba.reservations.utils.toDateFromPatternWithHours
+import edu.fiuba.reservations.utils.validator.CompositeValidator
 import edu.fiuba.reservations.utils.validator.Validator
 
 class ReservationValidator : BaseValidator(), Validator<CreateReservationDTO> {
@@ -39,6 +41,20 @@ class ReservationValidator : BaseValidator(), Validator<CreateReservationDTO> {
             )
         )
 
+        setCustomerExceptions(
+            data = data.customer!!,
+            fieldNames = fieldNames.plus(CreateReservationDTO::customer.name),
+            exceptions = exceptions
+        )
+
         return exceptions
+    }
+
+    private fun setCustomerExceptions(data: CustomerDTO, fieldNames: List<String>, exceptions: ArrayList<Exception>) {
+        val validators = ArrayList<Validator<CustomerDTO>>()
+        validators.add(CustomerValidator())
+
+        val customerValidator = CompositeValidator(validators)
+        exceptions.addAll(customerValidator.validate(data, fieldNames))
     }
 }
