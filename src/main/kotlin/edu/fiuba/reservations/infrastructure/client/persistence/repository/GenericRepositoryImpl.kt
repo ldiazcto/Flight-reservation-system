@@ -54,6 +54,24 @@ abstract class GenericRepositoryImpl<T>(
         )
     }
 
+    override fun update(documentId: String, entity: T): T {
+        val document = getCollection().document(documentId)
+        val writeResult = document.set(entity!!)
+
+        if (writeResult.get().updateTime.isNull()) {
+            throw ReservationException(
+                DATABASE_INTERNAL_ERROR.getMessage(),
+                DATABASE_INTERNAL_ERROR.getCode(),
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                listOf(
+                    Error(DATABASE_INTERNAL_ERROR)
+                )
+            )
+        }
+
+        return entity
+    }
+
     override fun delete(documentId: String) {
         val writeResult = getCollection().document(documentId).delete()
 
