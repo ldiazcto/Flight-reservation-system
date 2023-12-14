@@ -6,8 +6,6 @@ import edu.fiuba.reservations.utils.validator.Validator
 import kotlin.reflect.KClass
 
 class EnumValidator : Validator<Pair<String, KClass<out Enum<*>>>> {
-    private val acceptedValues: MutableList<String> = mutableListOf()
-
     override fun validate(data: Pair<String, KClass<out Enum<*>>>, fieldNames: List<String>): List<Exception> {
         val exceptions = ArrayList<Exception>()
 
@@ -23,9 +21,7 @@ class EnumValidator : Validator<Pair<String, KClass<out Enum<*>>>> {
     }
 
     private fun isValid(data: Pair<String, KClass<out Enum<*>>>): Boolean {
-        acceptedValues.addAll(
-            data.second.java.enumConstants.map { it.name }
-        )
+        val acceptedValues = data.second.java.enumConstants.map { it.name }
 
         return acceptedValues.contains(data.first.uppercase())
     }
