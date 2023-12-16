@@ -9,6 +9,10 @@ plugins {
     kotlin("plugin.spring") version "1.8.22"
 }
 
+tasks.wrapper {
+    gradleVersion = "8.3"
+}
+
 group = "edu.fiuba"
 version = "0.0.1-SNAPSHOT"
 
