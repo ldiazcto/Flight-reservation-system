@@ -20,10 +20,10 @@ class FlightConfiguration {
 
     @Bean
     fun flightFileManager(
-        @Value("\${data.csv.flights.path}") filePath: String
+        @Value("\${data.csv.flights.paths}") filePaths: ArrayList<String>
     ): FlightFileManager {
         return FlightFileManager(
-            filePath
+            filePaths
         )
     }
 }

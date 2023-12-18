@@ -14,7 +14,8 @@ data:
         name: "reservations"
   csv:
     flights:
-      path: "./vuelos.csv"
+      paths: "./aerolineas-argentinas-vuelos.csv, ./flybondi-vuelos.csv, ./jetsmart-vuelos.csv, \
+      ./latam-airlines-vuelos.csv"
 
 reservations:
   endpoints:
