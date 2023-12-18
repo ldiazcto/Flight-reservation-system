@@ -11,6 +11,11 @@ import edu.fiuba.reservations.logger
 import edu.fiuba.reservations.utils.ifNotNull
 import edu.fiuba.reservations.utils.isBetweenDates
 import edu.fiuba.reservations.utils.isNotNull
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.apache.commons.csv.CSVFormat
 import org.apache.commons.csv.CSVRecord
 import java.io.File
@@ -20,26 +25,56 @@ import java.io.IOException
 import java.io.InputStream
 
 class FlightFileManager(
-    private val filePath: String
+    private val filePaths: ArrayList<String>
 ) {
     private val log by logger()
 
     fun getFlights(flightCriteria: FlightCriteria): List<FlightSearch> {
-        val flights = readFile(FlightSearch::class.java)
-            .filter {
-                isSameAirline(flightCriteria.airline, it.airline) &&
-                    it.originAirport == flightCriteria.origin &&
-                    it.destinationAirport == flightCriteria.destination &&
-                    it.plannedDepartureTime.isBetweenDates(flightCriteria.from, flightCriteria.to) &&
-                    it.plannedArrivalTime.isBetweenDates(flightCriteria.from, flightCriteria.to)
+        var flights: List<FlightSearch> = listOf()
+
+        runBlocking {
+            val deferredFlights = filePaths.map { filePath ->
+                async {
+                    withContext(Dispatchers.IO) {
+                        readFile(filePath, FlightSearch::class.java)
+                    }
+                }
             }
 
-        return flights
+            withContext(Dispatchers.Default) {
+                flights = deferredFlights.awaitAll().flatten()
+            }
+        }
+
+        return flights.filter {
+            isSameAirline(flightCriteria.airline, it.airline) &&
+                it.originAirport == flightCriteria.origin &&
+                it.destinationAirport == flightCriteria.destination &&
+                it.plannedDepartureTime.isBetweenDates(flightCriteria.from, flightCriteria.to) &&
+                it.plannedArrivalTime.isBetweenDates(flightCriteria.from, flightCriteria.to)
+        }
     }
 
     fun getFlight(id: String): Flight {
-        val flight = readFile(Flight::class.java)
-            .firstOrNull { it.id.equals(id, true) }
+        var flights: List<Flight> = listOf()
+
+        runBlocking {
+            val deferredFlights = filePaths.map { filePath ->
+                async {
+                    withContext(Dispatchers.IO) {
+                        readFile(filePath, Flight::class.java)
+                    }
+                }
+            }
+
+            withContext(Dispatchers.Default) {
+                flights = deferredFlights.awaitAll().flatten()
+            }
+        }
+
+        val flight = flights.firstOrNull {
+            it.id.equals(id, true)
+        }
 
         if (flight.isNotNull()) {
             return flight!!
@@ -53,7 +88,7 @@ class FlightFileManager(
         )
     }
 
-    private fun <T> readFile(entityClass: Class<T>): List<T> {
+    private fun <T> readFile(filePath: String, entityClass: Class<T>): List<T> {
         var records: List<T> = listOf()
         var inputStream: InputStream? = null
         val classLoader = javaClass.getClassLoader()

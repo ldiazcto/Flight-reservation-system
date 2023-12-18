@@ -35,6 +35,8 @@ dependencies {
     implementation("commons-beanutils:commons-beanutils:1.9.4")
     implementation("org.apache.commons:commons-csv:1.10.0")
     implementation("org.apache.commons:commons-lang3:3.14.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:1.7.3")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
